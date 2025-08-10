@@ -1,1 +1,3 @@
 graph-rag/.env
+graph-rag/data/neo4j
+graph-rag/data/postgres
