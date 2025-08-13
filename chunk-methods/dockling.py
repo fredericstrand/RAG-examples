@@ -16,11 +16,11 @@ document_types = {
 
 all_out = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: {"title": None, "text": ""})))
 
-for fp in sorted(data_dir.glob("*.pdf")):
-    result = converter.convert(str(fp))
+for doc in sorted(data_dir.glob("*.pdf")):
+    result = converter.convert(str(doc))
     doc_data = result.document.export_to_dict()
 
-    doc_name = doc_data.get("name", fp.stem)
+    doc_name = doc_data.get("name", doc.stem)
     m = re.match(r"^([^_]+)", doc_name)
     prefix = m.group(1) if m else ""
     doc_type = document_types.get(prefix, "Ukjent dokumenttype")
@@ -41,13 +41,13 @@ for fp in sorted(data_dir.glob("*.pdf")):
             print("no text for item", item)
             continue
 
-        slot = all_out[doc_type][doc_name][page_num]
+        output = all_out[doc_type][doc_name][page_num]
         if label == "section_header":
-            slot["title"] = text
+            output["title"] = text
         else:
-            if slot["text"]:
-                slot["text"] += " "
-            slot["text"] += text
+            if output["text"]:
+                output["text"] += " "
+            output["text"] += text
 
 def to_dict(x):
     if isinstance(x, dict):
